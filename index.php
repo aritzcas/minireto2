@@ -12,8 +12,8 @@ function connect(){
         $DB_PASSWORD=$_ENV['DB_PASSWORD'];
         $DB_NAME=$_ENV['DB_NAME'];
         $DB_PORT=$_ENV['DB_PORT'];
-        $dbh = mysqli_connect("$DB_HOST", "$DB_USER", "$DB_PASSWORD", "$DB_NAME", "$DB_PORT");
-        return $dbh;
+        $mysqli = new mysqli("$DB_HOST", "$DB_USER", "$DB_PASSWORD", "$DB_NAME", "$DB_PORT");
+        return $mysqli;
     }
     catch(PDOException $e) {
     echo $e->getMessage();
@@ -21,19 +21,18 @@ function connect(){
 }
 
 function borrar(){
-        $dbh = connect(); //DELETE ALL FROM lista
-        $stmt = $dbh->prepare("DELETE  FROM lista ");
-        $stmt->setFetchMode(PDO::FETCH_OBJ);
+        $mysqli = connect(); //DELETE ALL FROM lista
+        $query = "DELETE FROM lista";
+        $result = $mysqli->query($query);
+
 }
 
 function select(){
-    $dbh = connect();
-    $stmt = $dbh->prepare("SELECT * FROM lista");
-    $stmt->setFetchMode(PDO::FETCH_OBJ);
-    $stmt->execute();
-    $lista = $stmt->fetchAll();
-    foreach ($lista as $producto) {
-        echo $producto->producto . "<br>";
+    $mysqli = connect();
+    $query = "SELECT * FROM lista";
+    $result = $mysqli->query($query);
+    foreach ($result as $row) {
+        echo $row['nombre']."<br>";
     }
     
 }
